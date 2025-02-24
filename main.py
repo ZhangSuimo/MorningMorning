@@ -63,7 +63,7 @@ def get_weather(province, city):
     temp = weatherinfo["temp"]
     # 最低气温
     tempn = weatherinfo["tempn"]
-    print("天气  " + weatherinfo)
+    print(weatherinfo)
     return weather, temp, tempn
 
 
