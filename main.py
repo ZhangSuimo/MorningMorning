@@ -229,6 +229,8 @@ def send_message(to_user, access_token, city_name, weather, max_temperature, min
         print("推送消息失败，请检查微信号是否正确")
     elif response["errcode"] == 0:
         print("推送消息成功")
+        print(data["data"])
+        print("words: " + words)
     else:
         print(response)
 
@@ -257,6 +259,7 @@ if __name__ == "__main__":
     note_ch, note_ch2, note_en, note_en2 = get_ciba()
     # 遇见彩虹
     words = get_words()
+    print("遇见彩虹: " + words)
     # 公众号推送消息
     for user in users:
         send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch, note_ch2, note_en, note_en2, words)
