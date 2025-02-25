@@ -63,6 +63,7 @@ def get_weather(province, city):
     temp = weatherinfo["temp"]
     # 最低气温
     tempn = weatherinfo["tempn"]
+    print(weatherinfo)
     return weather, temp, tempn
 
 
@@ -125,10 +126,15 @@ def get_ciba():
         note_ch2 = ""
 
     return note_ch, note_ch2, note_en, note_en2
-
+    
+def get_words():
+  words = requests.get("https://api.shadiao.pro/chp")
+  if words.status_code != 200:
+    return get_words()
+  return words.json()['data']['text']
 
 def send_message(to_user, access_token, city_name, weather, max_temperature, min_temperature, note_ch, note_ch2,
-                 note_en, note_en2):
+                 note_en, note_en2, love_words):
     url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={}".format(access_token)
     week_list = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
     year = localtime().tm_year
@@ -193,6 +199,10 @@ def send_message(to_user, access_token, city_name, weather, max_temperature, min
             "note_ch2": {
                 "value": note_ch2,
                 "color": get_color()
+            },
+            "love_words": {
+                "value": love_words,
+                "color": get_color()
             }
         }
     }
@@ -220,6 +230,7 @@ def send_message(to_user, access_token, city_name, weather, max_temperature, min
         print("推送消息失败，请检查微信号是否正确")
     elif response["errcode"] == 0:
         print("推送消息成功")
+        print(data["data"])
     else:
         print(response)
 
@@ -246,7 +257,9 @@ if __name__ == "__main__":
     weather, max_temperature, min_temperature = get_weather(province, city)
     # 获取词霸每日金句
     note_ch, note_ch2, note_en, note_en2 = get_ciba()
+    # 遇见彩虹
+    love_words = get_words()
     # 公众号推送消息
     for user in users:
-        send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch, note_ch2, note_en, note_en2)
+        send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch, note_ch2, note_en, note_en2, love_words)
     os.system("pause")
