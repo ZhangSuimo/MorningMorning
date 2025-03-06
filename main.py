@@ -133,10 +133,10 @@ def get_words():
     return get_words()
   love_words = words.json()['data']['text']
   if len(love_words) > 20:
-        love_words2 = love_words[20:]
-        love_words = love_words[:20]
-    else:
-        love_words2 = ""
+    love_words2 = love_words[20:]
+    love_words = love_words[:20]
+  else:
+    love_words2 = ""
   return love_words, love_words2
 
 def send_message(to_user, access_token, city_name, weather, max_temperature, min_temperature, note_ch, note_ch2,
