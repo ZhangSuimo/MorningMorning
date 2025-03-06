@@ -131,10 +131,16 @@ def get_words():
   words = requests.get("https://api.shadiao.pro/chp")
   if words.status_code != 200:
     return get_words()
-  return words.json()['data']['text']
+  love_words = words.json()['data']['text']
+  if len(love_words) > 20:
+        love_words2 = love_words[20:]
+        love_words = love_words[:20]
+    else:
+        love_words2 = ""
+  return love_words, love_words2
 
 def send_message(to_user, access_token, city_name, weather, max_temperature, min_temperature, note_ch, note_ch2,
-                 note_en, note_en2, love_words):
+                 note_en, note_en2, love_words, love_words2):
     url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={}".format(access_token)
     week_list = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
     year = localtime().tm_year
@@ -203,6 +209,10 @@ def send_message(to_user, access_token, city_name, weather, max_temperature, min
             "love_words": {
                 "value": love_words,
                 "color": get_color()
+            },
+            "love_words2": {
+                "value": love_words2,
+                "color": get_color()
             }
         }
     }
@@ -258,8 +268,8 @@ if __name__ == "__main__":
     # 获取词霸每日金句
     note_ch, note_ch2, note_en, note_en2 = get_ciba()
     # 遇见彩虹
-    love_words = get_words()
+    love_words, love_words2 = get_words()
     # 公众号推送消息
     for user in users:
-        send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch, note_ch2, note_en, note_en2, love_words)
+        send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch, note_ch2, note_en, note_en2, love_words, love_words2)
     os.system("pause")
