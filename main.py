@@ -128,16 +128,16 @@ def get_ciba():
     return note_ch, note_ch2, note_en, note_en2
     
 def get_words():
-  words = requests.get("https://api.shadiao.pro/chp")
-  if words.status_code != 200:
-    return get_words()
-  love_words = words.json()['data']['text']
-  if len(love_words) > 20:
-    love_words2 = love_words[20:]
-    love_words = love_words[:20]
-  else:
-    love_words2 = ""
-  return love_words, love_words2
+    words = requests.get("https://api.shadiao.pro/chp")
+    if words.status_code != 200:
+        return get_words()
+    love_words = words.json()['data']['text']
+    if len(love_words) > 20:
+        love_words2 = love_words[20:]
+        love_words = love_words[:20]
+    else:
+        love_words2 = ""
+    return love_words, love_words2
 
 def send_message(to_user, access_token, city_name, weather, max_temperature, min_temperature, note_ch, note_ch2,
                  note_en, note_en2, love_words, love_words2):
